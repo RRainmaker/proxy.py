@@ -11,7 +11,7 @@
 import os
 import gzip
 import logging
-import multiprocessing
+import threading
 from typing import Any, Dict, Optional
 
 from .base import BaseCacheResponsesPlugin
@@ -35,7 +35,7 @@ class CacheResponsesPlugin(BaseCacheResponsesPlugin):
     """Caches response using OnDiskCacheStore."""
 
     # Dynamically enable / disable cache
-    ENABLED = multiprocessing.Event()
+    ENABLED = threading.Event()
 
     def __init__(self, *args: Any, **kwargs: Any) -> None:
         super().__init__(*args, **kwargs)
