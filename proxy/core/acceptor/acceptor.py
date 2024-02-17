@@ -93,7 +93,7 @@ class Acceptor(multiprocessing.Process):
         self.executor_pids = executor_pids
         self.executor_locks = executor_locks
         # Selector
-        self.running = multiprocessing.Event()
+        self.running = threading.Event()
         self.selector: Optional[selectors.DefaultSelector] = None
         # File descriptors used to accept new work
         self.socks: Dict[int, socket.socket] = {}
