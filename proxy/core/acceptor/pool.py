@@ -16,7 +16,7 @@
 """
 import logging
 import argparse
-import multiprocessing
+import threading
 from typing import TYPE_CHECKING, Any, List, Optional
 from multiprocessing import connection
 from multiprocessing.reduction import send_handle
@@ -67,7 +67,7 @@ class AcceptorPool:
             listeners: ListenerPool,
             executor_queues: List[connection.Connection],
             executor_pids: List[int],
-            executor_locks: List['multiprocessing.synchronize.Lock'],
+            executor_locks: List['threading.Lock'],
             event_queue: Optional['EventQueue'] = None,
     ) -> None:
         self.flags = flags
@@ -76,7 +76,7 @@ class AcceptorPool:
         # Available executors
         self.executor_queues: List[connection.Connection] = executor_queues
         self.executor_pids: List[int] = executor_pids
-        self.executor_locks: List['multiprocessing.synchronize.Lock'] = executor_locks
+        self.executor_locks: List['threading.Lock'] = executor_locks
         # Eventing core queue
         self.event_queue: Optional['EventQueue'] = event_queue
         # Acceptor process instances
@@ -84,7 +84,7 @@ class AcceptorPool:
         # Fd queues used to share file descriptor with acceptor processes
         self.fd_queues: List[connection.Connection] = []
         # Internals
-        self.lock = multiprocessing.Lock()
+        self.lock = threading.Lock()
         # self.semaphore = multiprocessing.Semaphore(0)
 
     def __enter__(self) -> 'AcceptorPool':
